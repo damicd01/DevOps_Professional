@@ -1,0 +1,17 @@
+Resources:
+  CodeCommmitGroup:
+    Type: AWS::IAM::Group
+    Properties: 
+      GroupName: CodeCommitPowerUsers
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AWSCodeCommitPowerUser
+  CodeCommitUsers:
+    Type: AWS::IAM::User
+    Properties: 
+      UserName: maggie.simpson
+  UserGroupMapping:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName: !Ref CodeCommmitGroup
+      Users: 
+        - !Ref CodeCommitUsers
