@@ -1,0 +1,6 @@
+Resources:
+  PythonAppRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryName: devops_pro_python_app
+      RepositoryDescription: This repo will hold the app code devops_pro_python_app
