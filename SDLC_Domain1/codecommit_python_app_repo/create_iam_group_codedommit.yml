@@ -15,3 +15,15 @@ Resources:
       GroupName: !Ref CodeCommmitGroup
       Users: 
         - !Ref CodeCommitUsers
+  IAMKeys:
+    Type: AWS::IAM::AccessKey
+    Properties: 
+      Serial: 3
+      Status: Active
+      UserName: !Ref CodeCommitUsers
+
+Outputs:
+  SecretKey:
+    Value: !Ref IAMKeys
+  SecretAccessKey:
+    Value: !GetAtt IAMKeys.SecretAccessKey
