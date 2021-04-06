@@ -16,7 +16,7 @@ Resources:
         - codecommit-repository-branches-and-tags-deleted
         - codecommit-repository-branches-and-tags-updated
       Name: CodeCommitNotificationSNSRule
-      Resource: arn:aws:codecommit:eu-west-2:545191407063:devops_pro_python_app
+      Resource: !Sub "arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:devops_pro_python_app"
       Status: ENABLED
       Targets: 
         - TargetType: SNS
@@ -50,10 +50,10 @@ Resources:
                 "SNS:Publish",
                 "SNS:Receive"
               ],
-              "Resource": "arn:aws:sns:eu-west-2:545191407063:DanTestSNS",
+              "Resource": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:DanTestSNS",
               "Condition": {
                 "StringEquals": {
-                  "AWS:SourceOwner": "545191407063"
+                  "AWS:SourceOwner": "${AWS::AccountId}"
                 }
               }
             },
@@ -73,6 +73,6 @@ Resources:
   CodeCommitNotificationSNSTopicSubscription:
     Type: AWS::SNS::Subscription
     Properties:
-      Endpoint: danny.damico@gmail.com
+      Endpoint: email-address@gmail.com
       Protocol: email
       TopicArn: !Ref CodeCommitNotificationSNSTopic
