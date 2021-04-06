@@ -1,0 +1,78 @@
+Resources:
+  CodeCommitNotification:
+    Type: AWS::CodeStarNotifications::NotificationRule
+    Properties: 
+      DetailType: FULL
+      EventTypeIds: 
+        - codecommit-repository-comments-on-commits
+        - codecommit-repository-comments-on-pull-requests
+        - codecommit-repository-approvals-status-changed
+        - codecommit-repository-approvals-rule-override
+        - codecommit-repository-pull-request-created
+        - codecommit-repository-pull-request-source-updated
+        - codecommit-repository-pull-request-status-changed
+        - codecommit-repository-pull-request-merged
+        - codecommit-repository-branches-and-tags-created
+        - codecommit-repository-branches-and-tags-deleted
+        - codecommit-repository-branches-and-tags-updated
+      Name: CodeCommitNotificationSNSRule
+      Resource: arn:aws:codecommit:eu-west-2:545191407063:devops_pro_python_app
+      Status: ENABLED
+      Targets: 
+        - TargetType: SNS
+          TargetAddress: !Ref CodeCommitNotificationSNSTopic
+  CodeCommitNotificationSNSTopic:  
+    Type: AWS::SNS::Topic
+    Properties: 
+      DisplayName: CodeCommitNotificationSNSTopic
+  CodeCommitNotificationSNSTopicAccessPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties: 
+      PolicyDocument: 
+        {
+          "Version": "2008-10-17",
+          "Id": "__default_policy_ID",
+          "Statement": [
+            {
+              "Sid": "__default_statement_ID",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:GetTopicAttributes",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": "arn:aws:sns:eu-west-2:545191407063:DanTestSNS",
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": "545191407063"
+                }
+              }
+            },
+            {
+              "Sid": "AWSCodeStarNotifications_publish",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codestar-notifications.amazonaws.com"
+              },
+              "Action": "SNS:Publish",
+              "Resource": "arn:aws:sns:*:*:*"
+            }
+          ]
+        }
+      Topics: 
+        - !Ref CodeCommitNotificationSNSTopic
+  CodeCommitNotificationSNSTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: danny.damico@gmail.com
+      Protocol: email
+      TopicArn: !Ref CodeCommitNotificationSNSTopic
