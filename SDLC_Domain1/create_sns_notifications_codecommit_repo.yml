@@ -1,3 +1,11 @@
+Parameters:
+  AppRepo:
+    Description: "App Repo Name"
+    Type: String
+  EmailEndpoint:
+    Description: "This is the email address for the SNS notifications"
+    Type: String
+
 Resources:
   CodeCommitNotification:
     Type: AWS::CodeStarNotifications::NotificationRule
@@ -16,7 +24,7 @@ Resources:
         - codecommit-repository-branches-and-tags-deleted
         - codecommit-repository-branches-and-tags-updated
       Name: CodeCommitNotificationSNSRule
-      Resource: !Sub "arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:devops_pro_python_app"
+      Resource: !Sub "arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${AppRepo}"
       Status: ENABLED
       Targets: 
         - TargetType: SNS
@@ -50,7 +58,7 @@ Resources:
                 "SNS:Publish",
                 "SNS:Receive"
               ],
-              "Resource": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:DanTestSNS",
+              "Resource": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${CodeCommitNotificationSNSTopic}",
               "Condition": {
                 "StringEquals": {
                   "AWS:SourceOwner": "${AWS::AccountId}"
@@ -73,6 +81,6 @@ Resources:
   CodeCommitNotificationSNSTopicSubscription:
     Type: AWS::SNS::Subscription
     Properties:
-      Endpoint: email-address@gmail.com
+      Endpoint: !Ref EmailEndpoint
       Protocol: email
       TopicArn: !Ref CodeCommitNotificationSNSTopic
