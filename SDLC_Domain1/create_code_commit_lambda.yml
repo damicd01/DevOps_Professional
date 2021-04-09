@@ -24,5 +24,5 @@ Resources:
     Type: "AWS::Lambda::Permission"
     Properties: 
       Action: lambda:InvokeFunction
-      FunctionName: arn:aws:lambda:eu-west-2:545191407063:function:devopsprocodecommitlambda-CodeCommitLambda-BL0KRD7HOV2L
+      FunctionName: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:devopsprocodecommitlambda-CodeCommitLambda-BL0KRD7HOV2L
       Principal: "codecommit.amazonaws.com"
