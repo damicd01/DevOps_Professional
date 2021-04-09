@@ -4,3 +4,10 @@ Resources:
     Properties:
       RepositoryName: devops_pro_python_app
       RepositoryDescription: This repo will hold the app code devops_pro_python_app
+      Triggers:
+        - DestinationArn: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:devopsprocodecommitlambda-CodeCommitLambda-BL0KRD7HOV2L
+          Events: 
+            - all 
+          Name: CodeCommitLambdaTest
+          Branches:
+            - all
