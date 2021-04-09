@@ -8,17 +8,17 @@ Resources:
   CodeCommitRepo:
     Type: AWS::CodeCommit::Repository
     Properties:
-      RepositoryName: ${CodeCommitRepoName}
+      RepositoryName: !Ref CodeCommitRepoName
       Triggers:
         - DestinationArn: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaFunctionTrigger}
           Events: 
             - all 
-          Name: !Sub ${CodeCommitRepoName}Trigger
+          Name: !Sub ${CodeCommitRepoName}
           Branches:
             - all
 
-Outputs:
-  CodeCommitRepoOutput:
-    Value: !Ref CodeCommitRepo
-    Export:
-      Name: CodeCommitRepoExport
+#Outputs:
+#  CodeCommitRepoOutput:
+#    Value: !Ref CodeCommitRepo
+#    Export:
+#      Name: CodeCommitRepoExport
