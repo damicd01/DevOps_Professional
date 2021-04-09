@@ -9,5 +9,4 @@ Resources:
           Events: 
             - all 
           Name: CodeCommitLambdaTest
-          Branches:
-            - all
+
