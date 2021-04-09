@@ -1,0 +1,28 @@
+Parameters:
+  S3KeyParam:
+    Description: "Lambda object key is S3"
+    Type: String
+  S3ObjectVersionParam:
+    Description: "Lambda Object Version"
+    Type: String
+  S3BucketRef:
+    Description: "Lambda Bucket Ref"
+    Type: String
+
+Resources:
+  CodeCommitLambda: 
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      Handler: "codecommit_lambda.lambda_handler"
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/devopscert_lambda_s3_and_cwlogs"
+      Runtime: "python3.7"
+      Code: 
+        S3Bucket: !Ref S3BucketRef
+        S3Key: !Ref S3KeyParam
+        S3ObjectVersion: !Ref S3ObjectVersionParam
+  CodeCommitLambdaPermissions:
+    Type: "AWS::Lambda::Permission"
+    Properties: 
+      Action: lambda:InvokeFunction
+      FunctionName: arn:aws:lambda:eu-west-2:545191407063:function:devopsprocodecommitlambda-CodeCommitLambda-BL0KRD7HOV2L
+      Principal: "codecommit.amazonaws.com"
