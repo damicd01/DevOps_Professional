@@ -1,0 +1,20 @@
+Parameters:
+  BucketName:
+    Type: String
+
+Resources:
+  LambdaS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+          - ServerSideEncryptionByDefault: 
+              SSEAlgorithm: AES256
+      BucketName: !Ref BucketName
+      PublicAccessBlockConfiguration: 
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration: 
+        Status: Enabled
