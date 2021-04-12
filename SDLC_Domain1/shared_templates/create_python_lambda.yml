@@ -1,0 +1,29 @@
+#This stack will be ran after create_lambda_iam_permissions.yml
+Parameters:
+  S3KeyParam:
+    Description: "Lambda object key is S3"
+    Type: String
+  S3ObjectVersionParam:
+    Description: "Lambda Object Version"
+    Type: String
+  S3BucketRef:
+    Description: "Lambda Bucket Ref"
+    Type: String
+  HandlerName:
+    Type: String
+  LambdaRoleName:
+    Type: String
+  PythonRuntime:
+    Type: String
+
+Resources:
+  CodeCommitLambda: 
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      Handler: !Ref HandlerName
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaRoleName}"
+      Runtime: !Ref PythonRuntime
+      Code: 
+        S3Bucket: !Ref S3BucketRef
+        S3Key: !Ref S3KeyParam
+        S3ObjectVersion: !Ref S3ObjectVersionParam

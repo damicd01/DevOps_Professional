@@ -1,0 +1,13 @@
+Parameters:
+  LambdaName:
+    Type: String
+  BucketNameCF:
+    Type: String
+
+Resources:
+  CodeCommitCodeBuildLambda:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://${BucketNameCF}.s3.${AWS::Region}.amazonaws.com/create_lambda_iam_permissions.yml
+      Parameters:
+        LambdaName: !Ref LambdaName
