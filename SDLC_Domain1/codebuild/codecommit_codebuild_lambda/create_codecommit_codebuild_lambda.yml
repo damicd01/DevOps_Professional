@@ -1,0 +1,34 @@
+Parameters:
+  S3KeyParam:
+    Description: "Lambda object key is S3"
+    Type: String
+  S3ObjectVersionParam:
+    Description: "Lambda Object Version"
+    Type: String
+  S3BucketRef:
+    Description: "Lambda Bucket Ref"
+    Type: String
+  Handler:
+    Type: String
+  LambdaRole:
+    Type: String
+  AWSService:
+    Type: String   
+
+Resources:
+  CodeCommitLambda: 
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      Handler: !Ref Handler
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaRole}"
+      Runtime: "python3.7"
+      Code: 
+        S3Bucket: !Ref S3BucketRef
+        S3Key: !Ref S3KeyParam
+        S3ObjectVersion: !Ref S3ObjectVersionParam
+  CodeCommitLambdaPermissions:
+    Type: "AWS::Lambda::Permission"
+    Properties: 
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt CodeCommitLambda.Arn
+      Principal: !Sub "${AWSService}.amazonaws.com"
