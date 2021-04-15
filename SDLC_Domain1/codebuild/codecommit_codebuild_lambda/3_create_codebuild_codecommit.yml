@@ -11,7 +11,7 @@ Resources:
       TemplateURL: !Sub https://${BucketNameCF}.s3.${AWS::Region}.amazonaws.com/create_codecommit_repo.yml
       Parameters:
         CodeCommitRepoName: "codecommit_codebuild_lambda_trigger"
-        LambdaFunctionTrigger: "devopsprocodecommitlambda-CodeCommitLambda-BL0KRD7HOV2L"
+        LambdaFunctionTrigger: !ImportValue LambdaCodeCommitTrigger
   LambdaS3:
     Type: AWS::CloudFormation::Stack
     Properties:

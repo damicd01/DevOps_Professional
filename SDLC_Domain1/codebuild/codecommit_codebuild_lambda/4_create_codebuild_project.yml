@@ -1,0 +1,72 @@
+Parameters:
+  CodeBuildProjectName:
+    Type: String
+
+Resources:
+  CodeCommitCodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties: 
+      Artifacts: 
+        Type: NO_ARTIFACTS
+      Description: "This is just a test build project"
+      Environment: 
+        Image: aws/codebuild/standard:4.0
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+      ServiceRole: !Ref CodeCommitCodeBuildRole
+      Source: 
+        Type: CODECOMMIT
+        Location: https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/codecommit_codebuild_lambda_trigger
+  CodeCommitCodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${CodeBuildProjectName}Role"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess-Amplify
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codebuild.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+  CodeBuildPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Sub "${CodeBuildProjectName}Policy"
+      Description: "Test Policy needs to be changed"
+      Path: /
+      PolicyDocument:
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "logs:CreateLogGroup",
+              "Resource": !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": [
+                !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*:*"
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:Get*",
+                "s3:List*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      Roles:
+        - !Ref CodeCommitCodeBuildRole

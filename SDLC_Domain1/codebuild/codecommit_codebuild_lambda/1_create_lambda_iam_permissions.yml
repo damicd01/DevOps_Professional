@@ -1,6 +1,10 @@
 Parameters:
   LambdaName:
     Type: String
+  ManagedPolicy1:
+    Type: String
+  ManagedPolicy2:
+    Type: String
   BucketNameCF:
     Type: String
 
@@ -11,3 +15,5 @@ Resources:
       TemplateURL: !Sub https://${BucketNameCF}.s3.${AWS::Region}.amazonaws.com/create_lambda_iam_permissions.yml
       Parameters:
         LambdaName: !Ref LambdaName
+        ManagedPolicy1: !Ref ManagedPolicy1
+        ManagedPolicy2: !Ref ManagedPolicy2
