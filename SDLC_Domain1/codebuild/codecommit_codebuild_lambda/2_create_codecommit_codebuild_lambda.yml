@@ -32,3 +32,9 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt CodeCommitLambda.Arn
       Principal: !Sub "${AWSService}.amazonaws.com"
+
+Outputs:
+  LambdaARN:
+    Value: !GetAtt CodeCommitLambda.Arn
+    Export:
+      Name: LambdaCodeCommitTrigger
